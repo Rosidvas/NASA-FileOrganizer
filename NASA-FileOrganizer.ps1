@@ -1,5 +1,5 @@
 
-      <# ----NASA-Class file organizer---- #>
+  <# ----NASA-Class file organizer---- #>
     <# Author: Studer                    
     <  # Version: 0.0.1                    
     <# Date: 13/06/2022                  
@@ -9,19 +9,24 @@
     <#----------------------------------------------------#>
 
     $path = "C:\users\rando\downloads"
+    $dir = 'C:\users\rando\downloads'
     $picturePath = "C:\Users\rando\OneDrive\Pictures\Saved Pictures"
-    $countjpeg = 0
-    $files = Get-ChildItem $path
-
-    $fileNum = @(Get-ChildItem $path)
-    foreach ($files in $fileNum)
+    $emptyDownloads = false
+    
+    do
     {
+        get-childitem -path $path | select-object -First 1
         $extn = [System.IO.Path]::GetExtension($files)
-   
-        if ($extn -eq '.jpg')
+        if ($extn -eq '.jpg','.jpeg')
         {
-        Move-Item $files -Destination $picturePath
-        $countjpeg++
-        Write-Host "Picture moved successfully" -ForegroundColor Yellow
+            move-item -destination $picturePath
+            Write-Host "Picture moved successfully" -ForegroundColor Yellow
         }
-    }
+
+        
+        if ($hasAnySubdir = (Get-ChildItem -Force -Directory $dir).Count -gt 0)
+        {
+            $emptyDownloads = true
+        }
+        
+    } while ($emptyDownloads)
