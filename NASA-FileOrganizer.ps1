@@ -11,6 +11,7 @@
     $path = "C:\users\rando\downloads"
     $picturePath = "C:\Users\rando\OneDrive\Pictures\Saved Pictures"
     $countjpeg = 0
+    $files = Get-ChildItem $path
 
     $fileNum = @(Get-ChildItem $path)
     foreach ($files in $fileNum)
