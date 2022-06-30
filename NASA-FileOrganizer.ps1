@@ -1,5 +1,4 @@
-
-  <# ----NASA-Class file organizer---- #>
+<# ----NASA-Class file organizer---- #>
     <# Author: Studer                    
     <  # Version: 0.0.1                    
     <# Date: 13/06/2022                  
@@ -9,24 +8,39 @@
     <#----------------------------------------------------#>
 
     $path = "C:\users\rando\downloads"
-    $dir = 'C:\users\rando\downloads'
+    $filePath = 
     $picturePath = "C:\Users\rando\OneDrive\Pictures\Saved Pictures"
-    $emptyDownloads = false
-    
-    do
+    $emptyDownloads = $true
+    $Modules = @(Get-ChildItem -path "C:\Users\rando\OneDrive\Documents\Schule\BBBaden\Semester 2" | Select-Object Name)
+
+    $File = get-childitem -path $path | select-object -First 1
+    $hasAnyFiles = (Get-ChildItem -path $path).Count
+
+    while ($emptyDownloads)
     {
-        get-childitem -path $path | select-object -First 1
-        $extn = [System.IO.Path]::GetExtension($files)
-        if ($extn -eq '.jpg','.jpeg')
+        
+        $extn = [System.IO.Path]::GetExtension($File)
+
+        if ($extn -eq '.jpg' -or $extn -eq '.jpeg')
         {
-            move-item -destination $picturePath
+            $File | move-item -destination $picturePath
             Write-Host "Picture moved successfully" -ForegroundColor Yellow
         }
-
-        
-        if ($hasAnySubdir = (Get-ChildItem -Force -Directory $dir).Count -gt 0)
+        elseif ($extn -eq '.docx')
         {
-            $emptyDownloads = true
+            
+            if($File.Name -match $Modules)
+            {
+                $File | move-Item -Destination $filePath where $File.Name -match $Modules.Name
+            }
+
+            
         }
         
-    } while ($emptyDownloads)
+
+
+        if ($hasAnyFiles -gt 0)
+        {
+            $emptyDownloads = $false
+        }
+    } 
